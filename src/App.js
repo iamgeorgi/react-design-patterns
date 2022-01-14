@@ -1,75 +1,54 @@
-import { Modal } from "./Modal";
-import { NumberedList } from "./Numberedlist";
-import { LargeProuctlistItem } from "./people/LargePersonListItem";
-import { SmallProuctlistItem } from "./people/SmallPersonListItem";
-import { LargePersonListItem } from "./products/LargeProductListItem";
-import { SmallPersonListItem } from "./products/SmallProuctListItem";
-import { RegularList } from "./RegularList";
+import { ControlledForm } from "./ControlledForm";
+import { UncontrolledForm } from "./UncontrolledForm";
+import { useState } from 'react';
+import { ControlledModal } from "./ControlledModal";
+import { UncontrolledOnboardingFlow } from "./UncontrolledOnboardingFlow";
 
-const people = [{
-	name: 'John Doe',
-	age: 54,
-	hairColor: 'brown',
-	hobbies: ['swimming', 'bicycling', 'video games'],
-}, {
-	name: 'Brenda Smith',
-	age: 33,
-	hairColor: 'black',
-	hobbies: ['golf', 'mathematics'],
-}, {
-	name: 'Jane Garcia',
-	age: 27,
-	hairColor: 'blonde',
-	hobbies: ['biology', 'medicine', 'gymnastics'],
-}];
-
-const products = [{
-	name: 'Flat-Screen TV',
-	price: '$300',
-	description: 'Huge LCD screen, a great deal',
-	rating: 4.5,
-}, {
-	name: 'Basketball',
-	price: '$10',
-	description: 'Just like the pros use',
-	rating: 3.8,
-}, {
-	name: 'Running Shoes',
-	price: '$120',
-	description: 'State-of-the-art technology for optimum running',
-	rating: 4.2,
-}];
+const StepOne = ({ goToNext }) => (
+	<>
+		<h1>Step 1</h1>
+		<button onClick={() => goToNext({ name: 'John Doe' })}>Next</button>
+	</>
+);
+const StepTwo = ({ goToNext }) => (
+	<>
+		<h1>Step 2</h1>
+		<button onClick={() => goToNext({ age: 100 })}>Next</button>
+	</>
+);
+const StepThree = ({ goToNext }) => (
+	<>
+		<h1>Step 3</h1>
+		<button onClick={() => goToNext({ hairColor: 'brown' })}>Next</button>
+	</>
+);
 
 function App() {
+	const [shouldShowModal, setShouldShowModal] = useState(false);
 	return (
 		<>
-			<RegularList
-				items={people}
-				resourceName="person" // Small and LargePersonListItem gets it as a prop
-				itemComponent={SmallPersonListItem}
-			/>
-
-			<RegularList
-				items={people}
-				resourceName="person" // Small and LargePersonListItem gets it as a prop
-				itemComponent={LargePersonListItem}
-			/>
-
-			<NumberedList
-				items={products}
-				resourceName="product" // Small and LargePersonListItem gets it as a prop
-				itemComponent={SmallProuctlistItem}
-			/>
-			<NumberedList
-				items={products}
-				resourceName="product" // Small and LargePersonListItem gets it as a prop
-				itemComponent={LargeProuctlistItem}
-			/>
-			<Modal>
-				<LargeProuctlistItem product={products[0]}/>
-			</Modal>
+			<UncontrolledForm />
+			<ControlledForm />
+			{/* Modal is controlled because the parent controls his state and data */}
+			<ControlledModal
+				shouldShow={shouldShowModal}
+				onRequestClose={() => setShouldShowModal(false)}
+			>
+				<h1>Hello!</h1>
+			</ControlledModal>
+			<button onClick={() => setShouldShowModal(!shouldShowModal)}>
+				{shouldShowModal ? "Hide Modal" : "Show Modal"}
+			</button>
+			<UncontrolledOnboardingFlow onFinish={data => {
+				console.log(data);
+				alert('Onboarding complete!');
+			}}>
+				<StepOne />
+				<StepTwo />
+				<StepThree />
+			</UncontrolledOnboardingFlow>
 		</>
-	);
+	)
 }
 
 export default App;
