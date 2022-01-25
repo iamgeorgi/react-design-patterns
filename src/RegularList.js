@@ -4,7 +4,13 @@ export const RegularList = ({ items, resourceName, itemComponent: ItemComponent 
             {items.map((item, i) => (
              <ItemComponent 
              key={i} 
-             {...{[resourceName]: item}} // changes to person={item}
+             {...{[resourceName]: item}} 
+            //  ["person"]: {
+            //     name: 'John Doe',
+            //     age: 54,
+            //     hairColor: 'brown',
+            //     hobbies: ['swimming', 'bicycling', 'video games'],
+            // }
              />  
             ))}
         </>
